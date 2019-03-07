@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"mapreduce"
 	"os"
+	"unicode"
+	"strconv"
 )
 
 //
@@ -15,6 +17,29 @@ import (
 //
 func mapF(filename string, contents string) []mapreduce.KeyValue {
 	// Your code here (Part II).
+	words := wordFilter(contents)
+	fmt.Printf("Number of words: %d\n",len(words))
+	var res[]mapreduce.KeyValue
+	for _, w := range words{
+		res = append(res, mapreduce.KeyValue{w, "1"})
+	}
+	return res
+}
+
+func wordFilter(contents string) []string {
+	var res[]string
+	var newWord = ""
+	for _, ch := range contents{
+		if unicode.IsLetter(ch) {
+			newWord += string(ch)
+		}else {
+			if newWord != "" {
+				res = append(res, newWord)
+				newWord = ""
+			}
+		}
+	}
+	return res
 }
 
 //
@@ -24,6 +49,14 @@ func mapF(filename string, contents string) []mapreduce.KeyValue {
 //
 func reduceF(key string, values []string) string {
 	// Your code here (Part II).
+	var total int
+
+	for _, num := range values{
+		n, _ := strconv.Atoi(num)
+		total += n
+	}
+
+	return strconv.Itoa(total)
 }
 
 // Can be run in 3 ways:
