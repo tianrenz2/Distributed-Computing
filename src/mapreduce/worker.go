@@ -93,7 +93,7 @@ func (wk *Worker) DoTask(arg *DoTaskArgs, _ *struct{}) error {
 	return nil
 }
 
-// Shutdown is called by the master when all work has been completed.
+// Shutdown is called by the master when all work has been completded.
 // We should respond with the number of tasks we have processed.
 func (wk *Worker) Shutdown(_ *struct{}, res *ShutdownReply) error {
 	debug("Shutdown %s\n", wk.name)

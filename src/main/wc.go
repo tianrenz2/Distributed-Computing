@@ -18,7 +18,7 @@ import (
 func mapF(filename string, contents string) []mapreduce.KeyValue {
 	// Your code here (Part II).
 	words := wordFilter(contents)
-	fmt.Printf("Number of words: %d\n",len(words))
+	//fmt.Printf("Number of words: %d\n",len(words))
 	var res[]mapreduce.KeyValue
 	for _, w := range words{
 		res = append(res, mapreduce.KeyValue{w, "1"})
@@ -50,12 +50,10 @@ func wordFilter(contents string) []string {
 func reduceF(key string, values []string) string {
 	// Your code here (Part II).
 	var total int
-
 	for _, num := range values{
 		n, _ := strconv.Atoi(num)
 		total += n
 	}
-
 	return strconv.Itoa(total)
 }
 

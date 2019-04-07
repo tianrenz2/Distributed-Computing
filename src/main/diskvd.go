@@ -64,6 +64,7 @@ func main() {
 
 	runtime.GOMAXPROCS(4)
 
+
 	srv := diskv.StartServer(gid, masters, replicas, me, dir, restart)
 	srv.Setunreliable(unreliable)
 
