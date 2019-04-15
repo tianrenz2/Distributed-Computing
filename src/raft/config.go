@@ -18,7 +18,10 @@ import crand "crypto/rand"
 import "math/big"
 import "encoding/base64"
 import "time"
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func randstring(n int) string {
 	b := make([]byte, 2*n)
@@ -300,14 +303,24 @@ func (cfg *config) checkOneLeader() int {
 		ms := 450 + (rand.Int63() % 100)
 		time.Sleep(time.Duration(ms) * time.Millisecond)
 
+
+
 		leaders := make(map[int][]int)
 		for i := 0; i < cfg.n; i++ {
 			if cfg.connected[i] {
+				//_, leader := cfg.rafts[i].GetState()
+				//fmt.Print("Leader num: " + strconv.Itoa(i) + "," + strconv.FormatBool(leader) + "   ")
+
 				if term, leader := cfg.rafts[i].GetState(); leader {
+					//fmt.Print("Leader " + strconv.Itoa(i) + ", " + strconv.FormatBool(leader) + "	")
 					leaders[term] = append(leaders[term], i)
 				}
+
+
 			}
 		}
+
+
 
 		lastTermWithLeader := -1
 		for term, leaders := range leaders {
@@ -333,9 +346,11 @@ func (cfg *config) checkTerms() int {
 	for i := 0; i < cfg.n; i++ {
 		if cfg.connected[i] {
 			xterm, _ := cfg.rafts[i].GetState()
+			fmt.Println("Check term: " + strconv.Itoa(xterm))
 			if term == -1 {
 				term = xterm
 			} else if term != xterm {
+				fmt.Println("Check term: " + strconv.Itoa(term) + ", xterm:" + strconv.Itoa(xterm))
 				cfg.t.Fatalf("servers disagree on term")
 			}
 		}
